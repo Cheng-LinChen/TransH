@@ -1,39 +1,3 @@
-# import pandas as pd
-
-# # 1. Read the CSV file
-# df = pd.read_csv('kg.csv')
-
-# # --- Extract Unique Entities (ID, Name, Type) ---
-
-# # Select and rename columns for the 'x' entities
-# x_entities = df[['x_id', 'x_name', 'x_type']].rename(
-#     columns={'x_id': 'id', 'x_name': 'name', 'x_type': 'type'}
-# )
-
-# # Select and rename columns for the 'y' entities
-# y_entities = df[['y_id', 'y_name', 'y_type']].rename(
-#     columns={'y_id': 'id', 'y_name': 'name', 'y_type': 'type'}
-# )
-
-# # Concatenate both sets of entities
-# all_entities = pd.concat([x_entities, y_entities], ignore_index=True)
-
-# # Drop duplicates to get the final list of unique entities
-# unique_entities = all_entities.drop_duplicates(subset=['id', 'name', 'type']).reset_index(drop=True)
-
-# # Save the unique entities to a new CSV file
-# unique_entities.to_csv('unique_entities.csv', index=False)
-
-# # --- Extract Unique Node Types ---
-
-# # Get unique values from the 'type' column
-# unique_node_types = unique_entities['type'].unique().tolist()
-
-# # The unique entities DataFrame is stored in the 'unique_entities' variable
-# # The list of unique node types is stored in the 'unique_node_types' variable
-
-
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
