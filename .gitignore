@@ -1,0 +1,71 @@
+# ===============================
+# Python / General
+# ===============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.env
+.venv
+venv/
+ENV/
+env/
+
+# ===============================
+# Jupyter / IDE
+# ===============================
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
+
+# ===============================
+# PyTorch / CUDA
+# ===============================
+*.pt
+*.pth
+*.cuda
+*.cudnn
+
+# ===============================
+# Generated Experiment Outputs
+# ===============================
+# All TransE / TransH experiment folders
+TransE_dim=*_epochs=*/
+TransH_dim=*_epochs=*/
+
+# If you want to ignore ALL experiment outputs generically
+*_dim=*_epochs=*/
+
+# ===============================
+# Generated Files Inside Output Dirs
+# ===============================
+# Metrics and logs
+evaluation_results.txt
+*.log
+
+# Plots
+loss_curve.png
+*pca*.png
+*tsne*.png
+*scree*.png
+
+# Embeddings
+node_embeddings_with_metadata_dim=*.csv
+node_embeddings_tensor_dim=*.pt
+node_embeddings_dim=*.csv
+
+# ===============================
+# Data Files
+# ===============================
+processed_kg.csv
+
+# ===============================
+# Cache / Temporary
+# ===============================
+.cache/
+tmp/
+temp/
