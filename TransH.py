@@ -11,7 +11,7 @@ from visualize import plot_pca_embeddings_colored, plot_tsne_embeddings_colored
 
 from pykeen.losses import MarginRankingLoss 
 from pykeen.sampling import BernoulliNegativeSampler
-from pykeen.regularizers import LpRegularizer # <-- Import LpRegularizer
+from pykeen.regularizers import LpRegularizer 
 import pykeen.regularizers as regularizers
 import torch
 import os
@@ -128,7 +128,7 @@ metrics = training_loop.train(
     num_epochs=TRAINING_EPOCHS,
     batch_size=batch_size,
     use_tqdm_batch=False,
-    use_tqdm=True, # Use TQDM for overall epoch progress
+    use_tqdm=True, 
     stopper=early_stopper,
 )
 
@@ -140,7 +140,7 @@ results = evaluator.evaluate(
     additional_filter_triples=[training.mapped_triples, validation.mapped_triples],
     batch_size=EVAL_BATCH_SIZE,
     use_tqdm=True,
-    slice_size=1024,   # avoid loading full tensors
+    slice_size=1024,  
 )
 
 print("\nTraining complete!")
@@ -149,7 +149,7 @@ save_metrics(results, OUTPUT_DIR, filename="evaluation_results.txt")
 print("Matrics saved!")
 
 
-# === Free Memory After Evaluation ===
+# --- Free Memory After Evaluation ---
 del evaluator
 gc.collect()
 
@@ -162,7 +162,7 @@ print("Memory cleaned after evaluation!")
 
 import matplotlib.pyplot as plt
 
-# ---- Plot Loss Curve ----
+# --- Plot Loss Curve ---
 losses = np.asarray(metrics)
 
 plt.figure(figsize=(8, 5))
@@ -178,11 +178,11 @@ plt.close()  # Close the figure to free memory
 print(f"Loss curve saved at: {output_path}")
 
 # ---- Saving Embedding ----
-# 1️⃣ Get embeddings as numpy array
+# Get embeddings as numpy array
 entity_embeddings = model.entity_representations[0]().detach().cpu().numpy()
-entity_labels = list(tf.entity_id_to_label.values())  # strings of indices
+entity_labels = list(tf.entity_id_to_label.values())  
 
-# 2️⃣ Prepare metadata: merge x/y entity info from original df
+# Prepare metadata: merge x/y entity info from original df
 entity_meta = pd.concat([
     df[['x_idx','x_name','x_type']].rename(columns={'x_idx':'entity_idx', 'x_name':'name', 'x_type':'type'}),
     df[['y_idx','y_name','y_type']].rename(columns={'y_idx':'entity_idx', 'y_name':'name', 'y_type':'type'})
@@ -194,24 +194,25 @@ emb_df = pd.DataFrame(
     entity_embeddings,
     columns=[f"dim_{i}" for i in range(EMBEDDING_DIM)]
 )
-emb_df['entity_idx'] = [int(x) for x in entity_labels]  # cast PyKEEN labels to int
+# cast PyKEEN labels to int
+emb_df['entity_idx'] = [int(x) for x in entity_labels]  
 
-# 3️⃣ Merge metadata with embeddings
+# Merge metadata with embeddings
 df_entities = emb_df.merge(entity_meta, on='entity_idx', how='left')
 
-# 4️⃣ Reorder columns
+# Reorder columns
 cols = ['entity_idx', 'name', 'type'] + [f'dim_{i}' for i in range(EMBEDDING_DIM)]
 df_entities = df_entities[cols]
 
-# 5️⃣ Sort by entity_idx
+# Sort by entity_idx
 df_entities = df_entities.sort_values('entity_idx').reset_index(drop=True)
 
-# 6️⃣ Save CSV
+# Save CSV
 csv_path = os.path.join(OUTPUT_DIR, f"node_embeddings_with_metadata_dim={EMBEDDING_DIM}.csv")
 df_entities.to_csv(csv_path, index=False)
 print(f"[CSV] Saved embeddings with metadata → {csv_path}")
 
-# 7️⃣ Save tensor-only file
+# Save tensor-only file
 tensor_path = os.path.join(OUTPUT_DIR, f"node_embeddings_tensor_dim={EMBEDDING_DIM}.pt")
 torch.save(torch.tensor(entity_embeddings), tensor_path)
 print(f"[Tensor] Saved embedding tensor → {tensor_path}")

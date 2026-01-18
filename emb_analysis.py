@@ -28,11 +28,11 @@ def plot_pca_embeddings(embedding_file, output_dir="embedding_pca_plots"):
 
     os.makedirs(output_dir, exist_ok=True)
 
-    # 1. PCA projection (for the 2D plot)
+    # PCA projection (for the 2D plot)
     pca_2d = PCA(n_components=2, random_state=42)
     emb_pca_2d = pca_2d.fit_transform(embeddings)
 
-    # --- Embedding Quality Analysis (Variance) ---
+    # Embedding Quality Analysis (Variance)
     explained_variance = pca_2d.explained_variance_ratio_
     cumulative_variance = explained_variance.sum()
     
@@ -58,7 +58,7 @@ def plot_pca_embeddings(embedding_file, output_dir="embedding_pca_plots"):
     plt.savefig(save_path, dpi=200)
     print(f"[PCA] 2D Scatter Plot saved → {save_path}")
 
-    # 2. Scree Plot (for general embedding quality)
+    # Scree Plot (for general embedding quality)
     # Re-run PCA with all components to find the optimal dimension (k)
     pca_full = PCA(random_state=42)
     pca_full.fit(embeddings)
@@ -69,7 +69,7 @@ def plot_pca_embeddings(embedding_file, output_dir="embedding_pca_plots"):
     plt.figure(figsize=(9, 6))
     plt.plot(range(1, len(cumulative_variance_full) + 1), cumulative_variance_full, marker='o', linestyle='--')
     
-    # Optional: Draw lines for 80% and 90% retained variance
+    # Draw lines for 80% and 90% retained variance
     plt.axhline(y=0.80, color='r', linestyle='-')
     plt.text(1, 0.80, '80% Retention', color='r', fontsize=10, va='bottom')
     
@@ -83,7 +83,6 @@ def plot_pca_embeddings(embedding_file, output_dir="embedding_pca_plots"):
     save_path_scree = os.path.join(output_dir, "pca_scree_plot.png")
     plt.savefig(save_path_scree, dpi=200)
     print(f"[PCA] Scree Plot saved → {save_path_scree}")
-    # 
 
     return emb_pca_2d
 
@@ -120,7 +119,7 @@ def plot_tsne_embeddings(embedding_file, output_dir="embedding_tsne_plots", perp
         n_components=2,
         perplexity=perplexity,
         initialization="pca",
-        n_jobs=-1,         # use all CPU cores
+        n_jobs=-1,         
         random_state=42
     )
     print("cp2: fitting t-SNE")
@@ -175,7 +174,7 @@ def save_metrics(results, save_dir, filename="evaluation_results.txt"):
 
 # ---------- MAIN SCRIPT TO RUN BOTH VISUALIZATIONS ----------
 
-EMBEDDING_FILE = "TransE_entity_embeddings_256.csv"   # <-- your embedding file
+EMBEDDING_FILE = "TransE_entity_embeddings_256.csv"   
 OUTPUT_PCA_DIR = "pca_output"
 OUTPUT_TSNE_DIR = "tsne_output"
 
